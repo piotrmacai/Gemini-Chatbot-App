@@ -1,0 +1,7 @@
+{
+  "name": "GeminiChatbotApp",
+  "description": "A feature-rich web application that replicates the Google Gemini interface, offering multimodal chat, image generation/editing, web search grounding, and persistent chat history.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
