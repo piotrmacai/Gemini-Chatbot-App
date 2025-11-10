@@ -31,6 +31,7 @@ export enum Model {
   IMAGEN = 'imagen-4.0-generate-001',
   GEMINI_IMAGE = 'gemini-2.5-flash-image',
   WEB_SEARCH = 'web-search', // This is a special case
+  N8N_AGENT = 'n8n-agent',
 }
 
 export interface ImageFile {

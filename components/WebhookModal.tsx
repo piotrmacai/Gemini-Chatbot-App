@@ -2,26 +2,26 @@
 import React, { useState, useEffect } from 'react';
 import { CloseIcon } from './icons/CloseIcon';
 
-interface ProfileModalProps {
+interface WebhookModalProps {
   isOpen: boolean;
   onClose: () => void;
-  systemPrompt: string;
-  onSave: (systemPrompt: string) => void;
+  n8nWebhookUrl: string;
+  onSave: (url: string) => void;
 }
 
-const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, systemPrompt, onSave }) => {
-  const [localPrompt, setLocalPrompt] = useState(systemPrompt);
+const WebhookModal: React.FC<WebhookModalProps> = ({ isOpen, onClose, n8nWebhookUrl, onSave }) => {
+  const [localWebhookUrl, setLocalWebhookUrl] = useState(n8nWebhookUrl);
 
   useEffect(() => {
-    setLocalPrompt(systemPrompt);
-  }, [systemPrompt, isOpen]); // Reset when props change or modal opens
+    setLocalWebhookUrl(n8nWebhookUrl);
+  }, [n8nWebhookUrl, isOpen]);
 
   if (!isOpen) {
     return null;
   }
 
   const handleSave = () => {
-    onSave(localPrompt);
+    onSave(localWebhookUrl);
     onClose();
   };
 
@@ -29,25 +29,26 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, systemProm
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 transition-opacity duration-300" onClick={onClose}>
       <div className="bg-[#1e1f22] rounded-xl shadow-2xl p-6 w-full max-w-2xl m-4 transform transition-all duration-300 scale-95 opacity-0 animate-fade-in-scale" onClick={(e) => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-100">Chat Settings</h2>
+          <h2 className="text-2xl font-bold text-gray-100">Webhook Settings</h2>
           <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-700">
             <CloseIcon />
           </button>
         </div>
         <div className="space-y-8">
             <div>
-                <h3 className="text-lg font-semibold text-gray-200 mb-3 border-b border-gray-700 pb-2">Current Chat Settings</h3>
+                <h3 className="text-lg font-semibold text-gray-200 mb-3 border-b border-gray-700 pb-2">Global Settings</h3>
                 <div className="mt-4">
-                    <label htmlFor="system-prompt" className="block text-sm font-medium text-gray-300 mb-2">System Prompt</label>
-                    <textarea
-                        id="system-prompt"
-                        value={localPrompt}
-                        onChange={(e) => setLocalPrompt(e.target.value)}
-                        placeholder="e.g., You are a helpful assistant that specializes in creative writing."
-                        className="w-full h-32 p-3 bg-[#2a2b2e] rounded-md text-gray-200 resize-none focus:ring-2 focus:ring-blue-500 outline-none placeholder-gray-500"
+                    <label htmlFor="n8n-webhook-url" className="block text-sm font-medium text-gray-300 mb-2">n8n SEO Agent Webhook URL</label>
+                    <input
+                        id="n8n-webhook-url"
+                        type="url"
+                        value={localWebhookUrl}
+                        onChange={(e) => setLocalWebhookUrl(e.target.value)}
+                        placeholder="Enter webhook URL for the n8n agent..."
+                        className="w-full p-3 bg-[#2a2b2e] rounded-md text-gray-200 focus:ring-2 focus:ring-blue-500 outline-none placeholder-gray-500"
                     />
                     <p className="text-xs text-gray-500 mt-2">
-                        Customize Gemini's personality and instructions for this chat. This will not affect other chats.
+                        This URL is used by the 'n8n SEO Agent' model to connect to your n8n workflow.
                     </p>
                 </div>
             </div>
@@ -74,4 +75,4 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, systemProm
   );
 };
 
-export default ProfileModal;
+export default WebhookModal;
