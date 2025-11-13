@@ -11,7 +11,7 @@ const modelOptions = [
   { id: Model.GEMINI_FLASH, name: 'Gemini 2.5 Flash', description: 'Fast and efficient for most tasks.' },
   { id: Model.GEMINI_PRO, name: 'Gemini 2.5 Pro', description: 'Most capable model for complex reasoning.' },
   { id: Model.WEB_SEARCH, name: 'Web Search Agent', description: 'Grounded with Google Search results.' },
-  { id: Model.N8N_AGENT, name: 'n8n SEO Agent', description: 'Connects to an n8n workflow for SEO Audits.' },
+  { id: Model.N8N_AGENT, name: 'n8n Agent', description: 'Connects to an n8n workflow for SEO Audits.' },
 ];
 
 const ModelSelector: React.FC<ModelSelectorProps> = ({ selectedModel, onModelChange }) => {

@@ -100,13 +100,31 @@ export const runN8NAgent = async (prompt: string, webhookUrl: string): Promise<C
       const errorText = await response.text();
       throw new Error(`n8n webhook failed with status ${response.status}. Response: ${errorText}`);
     }
+    
+    const responseBody = await response.text();
 
-    const data = await response.json();
+    if (!responseBody.trim()) {
+      return { text: 'The n8n workflow executed successfully but returned an empty response. Please check the "Respond to Webhook" node in your workflow.' };
+    }
+
+    let data;
+    try {
+      data = JSON.parse(responseBody);
+    } catch (e) {
+      // If parsing fails, it's likely plain text.
+      return { text: responseBody };
+    }
+
     let responseText = '';
 
     // n8n often returns an array of items from the last node.
     if (Array.isArray(data) && data.length > 0) {
-      const firstItem = data[0];
+      let firstItem = data[0];
+      // Check for the common n8n wrapper { json: {...} }
+      if (typeof firstItem === 'object' && firstItem !== null && firstItem.json) {
+        firstItem = firstItem.json;
+      }
+      
       if (typeof firstItem === 'object' && firstItem !== null) {
         // Look for common response keys
         if (firstItem.response) responseText = firstItem.response;

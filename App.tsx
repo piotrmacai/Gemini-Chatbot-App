@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Chat, Message, Role, Model, ImageFile, Source } from './types';
 import LeftSidebar from './components/LeftSidebar';
@@ -7,7 +6,6 @@ import RightSidebar from './components/RightSidebar';
 import { runChat, generateImage, editImage, runWebSearch, runN8NAgent } from './services/geminiService';
 import { MenuIcon, CanvaIcon } from './components/icons/MenuIcon';
 import ProfileModal from './components/ProfileModal';
-import WebhookModal from './components/WebhookModal';
 import ModelSelector from './components/ModelSelector';
 
 const App: React.FC = () => {
@@ -17,8 +15,7 @@ const App: React.FC = () => {
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
   const [selectedModel, setSelectedModel] = useState<Model>(Model.GEMINI_FLASH);
   const [isLoading, setIsLoading] = useState(false);
-  const [isChatSettingsModalOpen, setIsChatSettingsModalOpen] = useState(false);
-  const [isWebhookModalOpen, setIsWebhookModalOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [n8nWebhookUrl, setN8nWebhookUrl] = useState<string>('https://n8n.srv1089377.hstgr.cloud/webhook/seoaudit');
   
   const N8N_WEBHOOK_URL_KEY = 'gemini-clone-n8n-webhook-url';
@@ -81,14 +78,11 @@ const App: React.FC = () => {
     setChats(prev => prev.map(c => c.id === chatId ? { ...c, ...updates } : c));
   };
 
-  const handleSaveChatSettings = (systemPrompt: string) => {
+  const handleSaveSettings = (settings: { systemPrompt: string; n8nWebhookUrl: string }) => {
     if (activeChatId) {
-        updateChat(activeChatId, { systemPrompt });
+        updateChat(activeChatId, { systemPrompt: settings.systemPrompt });
     }
-  };
-  
-  const handleSaveWebhookSettings = (url: string) => {
-    setN8nWebhookUrl(url);
+    setN8nWebhookUrl(settings.n8nWebhookUrl);
   };
 
   const handleDeleteMessage = (messageId: string) => {
@@ -181,8 +175,7 @@ const App: React.FC = () => {
         activeChatId={activeChatId}
         onNewChat={createNewChat}
         onSelectChat={setActiveChatId}
-        onOpenChatSettingsModal={() => setIsChatSettingsModalOpen(true)}
-        onOpenWebhookSettingsModal={() => setIsWebhookModalOpen(true)}
+        onOpenProfileModal={() => setIsProfileModalOpen(true)}
       />
       <div className="flex-1 flex flex-col relative">
         <header className="flex items-center justify-between p-2 md:p-4 bg-[#1e1f22] border-b border-gray-700">
@@ -215,16 +208,11 @@ const App: React.FC = () => {
         sources={activeChat?.messages.slice(-1)[0]?.sources}
       />
        <ProfileModal
-        isOpen={isChatSettingsModalOpen}
-        onClose={() => setIsChatSettingsModalOpen(false)}
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
         systemPrompt={activeChat?.systemPrompt || ''}
-        onSave={handleSaveChatSettings}
-      />
-      <WebhookModal
-        isOpen={isWebhookModalOpen}
-        onClose={() => setIsWebhookModalOpen(false)}
         n8nWebhookUrl={n8nWebhookUrl}
-        onSave={handleSaveWebhookSettings}
+        onSave={handleSaveSettings}
       />
     </div>
   );

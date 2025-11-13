@@ -1,9 +1,7 @@
-
 import React from 'react';
 import { Chat } from '../types';
 import { PlusIcon } from './icons/PlusIcon';
 import { ProfileIcon } from './icons/ProfileIcon';
-import { GearIcon } from './icons/GearIcon';
 
 interface LeftSidebarProps {
   isOpen: boolean;
@@ -11,8 +9,7 @@ interface LeftSidebarProps {
   activeChatId: string | null;
   onNewChat: () => void;
   onSelectChat: (id: string) => void;
-  onOpenChatSettingsModal: () => void;
-  onOpenWebhookSettingsModal: () => void;
+  onOpenProfileModal: () => void;
 }
 
 const LeftSidebar: React.FC<LeftSidebarProps> = ({
@@ -21,8 +18,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({
   activeChatId,
   onNewChat,
   onSelectChat,
-  onOpenChatSettingsModal,
-  onOpenWebhookSettingsModal,
+  onOpenProfileModal,
 }) => {
   return (
     <div
@@ -55,22 +51,14 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({
         ))}
       </div>
 
-      <div className="border-t border-gray-700 pt-4 flex-shrink-0 space-y-2">
+      <div className="border-t border-gray-700 pt-4 flex-shrink-0">
         <button 
-          onClick={onOpenChatSettingsModal}
+          onClick={onOpenProfileModal}
           className="flex items-center space-x-3 w-full p-2 rounded-md hover:bg-gray-800"
-          title="Chat Settings"
+          title="Profile Settings"
         >
           <ProfileIcon />
-          <span className="text-gray-200">Chat Settings</span>
-        </button>
-        <button 
-          onClick={onOpenWebhookSettingsModal}
-          className="flex items-center space-x-3 w-full p-2 rounded-md hover:bg-gray-800"
-          title="Webhook Settings"
-        >
-          <GearIcon />
-          <span className="text-gray-200">Webhook Settings</span>
+          <span className="text-gray-200">Profile Settings</span>
         </button>
       </div>
     </div>
